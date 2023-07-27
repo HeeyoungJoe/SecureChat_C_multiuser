@@ -48,8 +48,6 @@ void send_to_all_clients(ClientList *np, char tmp_buffer[]) {
 //03->귓속말 메세지 [03]-[보내는 user code]-[받는 user code]-[암호화 된 메세지]
 
 
-유저:코드:공개키 struct 필요함
-
 void selective_message_send(ClientList *np, char tmp_buffer[]){
 
     char selector[3],user_code[7];
@@ -145,7 +143,7 @@ void client_handler(void *p_client) {
         strncpy(code_update_message,"11",2);
         strncpy(code_update_message+2,np->user_code,6);
         strncpy(code_update_message+8,np->name,strlen(np->name));
-        send_to_all_clients(c->data,code_update_message);
+        send_to_all_clients(np->data,code_update_message);
 
 
         strncpy(np->name, nickname, LENGTH_NAME);
