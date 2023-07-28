@@ -3,7 +3,7 @@
 
 typedef struct ClientNode {
     int data;
-    char user_code[7];
+    char user_code[6];
     char public_key[129];
     struct ClientNode* prev;
     struct ClientNode* link;
