@@ -69,6 +69,7 @@ int selective_message_send(ClientList *np, char tmp_buffer[]){
         char recv_user_code[LENGTH_USERCODE];
         strncpy(recv_user_code,tmp_buffer+8,6);
         ClientList *tmp = root->link;
+
         while (tmp != NULL) {
             if (recv_user_code == tmp->user_code) { 
                 //공개키 보내기
@@ -143,12 +144,13 @@ void client_handler(void *p_client) {
         strncpy(code_init_message+2,np->user_code,6);
         send(np->data,code_init_message,strlen(code_init_message),0);
         printf("\nUser code sent: %s\n",code_init_message);
+        free(code_init_message);
 
-        //[11]-[다른 유저 코드]-[다른 유저 이름] 나에게 -Done
+        //[11]-[다른 유저 코드]-[다른 유저 이름] 새로 들어온 클라이언트에게 기존의 클라이언트 정보 전달 -Done
         //Segmentation fault core dumped
         printf("TMP not empty:%s",tmp->name);
         while(tmp!=NULL){            
-            char code_recv_message[50];
+            char *code_recv_message=(char*)malloc(sizeof(char)*(2+LENGTH_USERCODE*2)+1);
             strncpy(code_recv_message,'11',2);
             strncpy(code_recv_message+2,tmp->user_code,6);
             strncpy(code_recv_message+8,tmp->name,strlen(tmp->name));
