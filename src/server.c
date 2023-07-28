@@ -138,10 +138,11 @@ void client_handler(void *p_client) {
         char code_init_message[2+LENGTH_USERCODE];
         strncpy(code_init_message,"10",2);
         strncpy(code_init_message+2,np->user_code,6);
-        printf("User code sent: %s",code_init_message);
         send(np->data,code_init_message,strlen(code_init_message),0);
+        printf("\nUser code sent: %s\n",code_init_message);
 
         //[11]-[다른 유저 코드]-[다른 유저 이름] 나에게 -Done
+        printf("TMP not empty:%s",tmp->name);
         while(tmp!=NULL){            
             char code_recv_message[50];
             strncpy(code_recv_message,'11',2);
