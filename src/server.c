@@ -126,7 +126,8 @@ void client_handler(void *p_client) {
     char recv_buffer[LENGTH_MSG] = {};
     char send_buffer[LENGTH_SEND] = {};
     ClientList *np = (ClientList *)p_client;
-    ClientList *tmp=root->link;
+    ClientList *tmp =(ClientList *)malloc(sizeof(ClientList)+1);
+    tmp=root->link;
 
     // Naming
     if (recv(np->data, nickname, LENGTH_NAME, 0) <= 0 || strlen(nickname) < 2 || strlen(nickname) >= LENGTH_NAME-1) {
@@ -144,7 +145,6 @@ void client_handler(void *p_client) {
         strncpy(code_init_message+2,np->user_code,6);
         send(np->data,code_init_message,strlen(code_init_message),0);
         printf("\nUser code sent: %s\n",code_init_message);
-        printf("???\n");
         //free(code_init_message);
 
         //[11]-[다른 유저 코드]-[다른 유저 이름] 새로 들어온 클라이언트에게 기존의 클라이언트 정보 전달 -Done
