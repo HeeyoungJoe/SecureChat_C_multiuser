@@ -243,7 +243,7 @@ int main()
 
     // Initial linked list for clients
     root = newNode(server_sockfd, inet_ntoa(server_info.sin_addr));
-    root->user_code="000000";
+    strncpy(root->user_code,"000000",6);
     now = root;
 
     while (1) {
