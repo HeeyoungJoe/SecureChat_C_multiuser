@@ -18,8 +18,8 @@ ClientList *root, *now;
 char tmp_user_code[7];
 
 int equals(char *w1, char *w2, int length){
-    char *ww1[length];
-    char *ww2[length];
+    char ww1[length];
+    char ww2[length];
     strncpy(ww1,w1,length);
     strncpy(ww2,w2,length);
     if(ww1==ww2){
