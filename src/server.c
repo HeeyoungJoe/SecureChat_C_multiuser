@@ -132,7 +132,11 @@ void client_handler(void *p_client) {
         printf("%s didn't input name.\n", np->ip);
         leave_flag = 1;
     } else {
-        
+        strncpy(np->name, nickname, LENGTH_NAME);
+        printf("%s(%s)(%d) join the chatroom.\n", np->name, np->ip, np->data);
+        sprintf(send_buffer, "%s(%s) join the chatroom.", np->name, np->ip);
+        //send_to_all_clients(np, send_buffer); 
+
         //[10]-[내 user code]-Done/Test done
         char code_init_message[2+LENGTH_USERCODE];
         strncpy(code_init_message,"10",2);
@@ -160,10 +164,7 @@ void client_handler(void *p_client) {
         send_to_all_clients(np,code_update_message);
 
 
-        strncpy(np->name, nickname, LENGTH_NAME);
-        printf("%s(%s)(%d) join the chatroom.\n", np->name, np->ip, np->data);
-        sprintf(send_buffer, "%s(%s) join the chatroom.", np->name, np->ip);
-        send_to_all_clients(np, send_buffer);
+
     }
 
     // np의 공개키 받기 - Done
