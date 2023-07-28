@@ -133,15 +133,15 @@ void client_handler(void *p_client) {
         leave_flag = 1;
     } else {
         
-        //[10]-[내 user code]-Done
-        //Secgmentation fault core dumped
+        //[10]-[내 user code]-Done/Test done
         char code_init_message[2+LENGTH_USERCODE];
         strncpy(code_init_message,"10",2);
         strncpy(code_init_message+2,np->user_code,6);
         send(np->data,code_init_message,strlen(code_init_message),0);
-        printf("\nUser code sent: %s\n",code_init_message);
+        //printf("\nUser code sent: %s\n",code_init_message);
 
         //[11]-[다른 유저 코드]-[다른 유저 이름] 나에게 -Done
+        //Segmentation fault core dumped
         printf("TMP not empty:%s",tmp->name);
         while(tmp!=NULL){            
             char code_recv_message[50];
