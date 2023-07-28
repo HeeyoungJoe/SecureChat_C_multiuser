@@ -17,16 +17,16 @@ int server_sockfd = 0, client_sockfd = 0;
 ClientList *root, *now;
 char tmp_user_code[7];
 
-bool equals(char *w1, char *w2, int length){
+int equals(char *w1, char *w2, int length){
     char *ww1[length];
     char *ww2[length];
     strncpy(ww1,w1,length);
     strncpy(ww2,w2,length);
     if(ww1==ww2){
-        return true;
+        return 1;//true
     }
     else{
-        return false;
+        return 0;//false
     }
 }
 void catch_ctrl_c_and_exit(int sig) {
