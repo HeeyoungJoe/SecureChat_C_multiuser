@@ -242,7 +242,7 @@ int main()
         // Append linked list for clients
         ClientList *c = newNode(client_sockfd, inet_ntoa(client_info.sin_addr));
         strncpy(c->user_code,now->user_code,6);
-        c->user_code=inc(c->user_code,c->user_code+5);//NEED TEST
+        strncpy(c->user_code,inc(c->user_code,c->user_code+5),6);//NEED TEST
         c->prev = now;
         now->link = c;
         now = c;
