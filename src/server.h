@@ -11,13 +11,14 @@ typedef struct ClientNode {
     char name[31];
 } ClientList;
 
-ClientList *newNode(int sockfd, char* ip) {
+ClientList *newNode(int sockfd, char* ip,char*user_code) {
     ClientList *np = (ClientList *)malloc( sizeof(ClientList) );
     np->data = sockfd;
     np->prev = NULL;
     np->link = NULL;
     strncpy(np->ip, ip, 16);
     strncpy(np->name, "NULL", 5);
+    strncpy(np->user_code,user_code,6);
     return np;
 }
 

@@ -244,8 +244,7 @@ int main()
     printf("Start Server on: %s:%d\n", inet_ntoa(server_info.sin_addr), ntohs(server_info.sin_port));
 
     // Initial linked list for clients
-    root = newNode(server_sockfd, inet_ntoa(server_info.sin_addr));
-    strncpy(root->user_code,"000000",6);
+    root = newNode(server_sockfd, inet_ntoa(server_info.sin_addr),"000000");
     now = root;
 
     while (1) {
@@ -256,9 +255,7 @@ int main()
         printf("Client %s:%d come in.\n", inet_ntoa(client_info.sin_addr), ntohs(client_info.sin_port));
 
         // Append linked list for clients
-        ClientList *c = newNode(client_sockfd, inet_ntoa(client_info.sin_addr));
-        strncpy(c->user_code,now->user_code,6);
-        strncpy(c->user_code,inc(c->user_code,c->user_code+5),6);
+        ClientList *c = newNode(client_sockfd, inet_ntoa(client_info.sin_addr),inc(now->user_code,now->user_code+5));
         c->prev = now;
         now->link = c;
         now = c;
