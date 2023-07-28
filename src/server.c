@@ -138,7 +138,7 @@ void client_handler(void *p_client) {
         //send_to_all_clients(np, send_buffer); 
 
         //[10]-[내 user code]-Done/Test done
-        char code_init_message[2+LENGTH_USERCODE];
+        char *code_init_message=(char*)malloc(sizeof(char)*(2+LENGTH_USERCODE));
         strncpy(code_init_message,"10",2);
         strncpy(code_init_message+2,np->user_code,6);
         send(np->data,code_init_message,strlen(code_init_message),0);
@@ -246,6 +246,7 @@ int main()
     // Initial linked list for clients
     root = newNode(server_sockfd, inet_ntoa(server_info.sin_addr),"000000");
     now = root;
+    printf("\n\nRoot initialized:%s\n",root->user_code);
 
     while (1) {
         client_sockfd = accept(server_sockfd, (struct sockaddr*) &client_info, (socklen_t*) &c_addrlen);
@@ -259,6 +260,7 @@ int main()
         c->prev = now;
         now->link = c;
         now = c;
+        printf("ClientNode appended to the list:%s\n",c->user_code);
 
         pthread_t id;
         if (pthread_create(&id, NULL, (void *)client_handler, (void *)c) != 0) {
