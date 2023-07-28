@@ -134,9 +134,11 @@ void client_handler(void *p_client) {
     } else {
         
         //[10]-[내 user code]-Done
+        //Secgmentation fault core dumped
         char code_init_message[9];
         strncpy(code_init_message,"10",2);
         strncpy(code_init_message+2,np->user_code,6);
+        printf("User code sent: %s",code_init_message);
         send(np->data,code_init_message,strlen(code_init_message),0);
 
         //[11]-[다른 유저 코드]-[다른 유저 이름] 나에게 -Done
@@ -241,6 +243,7 @@ int main()
 
     // Initial linked list for clients
     root = newNode(server_sockfd, inet_ntoa(server_info.sin_addr));
+    root->user_code="000000";d
     now = root;
 
     while (1) {
@@ -253,7 +256,7 @@ int main()
         // Append linked list for clients
         ClientList *c = newNode(client_sockfd, inet_ntoa(client_info.sin_addr));
         strncpy(c->user_code,now->user_code,6);
-        strncpy(c->user_code,inc(c->user_code,c->user_code+5),6);//NEED TEST
+        strncpy(c->user_code,inc(c->user_code,c->user_code+5),6);
         c->prev = now;
         now->link = c;
         now = c;
