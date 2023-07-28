@@ -47,8 +47,12 @@ void send_msg_handler() {
                 break;
             }
         }
-        send(sockfd, message, LENGTH_MSG, 0);
-        if (strcmp(message, "exit") == 0) {
+        //1. Stub
+        char sent_message[8+LENGTH_MSG];
+        strncpy(sent_message,"01",2);
+        strncpy(sent_message+2,"999999",6);
+        send(sockfd, sent_message, 8+LENGTH_MSG, 0);
+        if (strcmp(sent_message, "exit") == 0) {
             break;
         }
     }
