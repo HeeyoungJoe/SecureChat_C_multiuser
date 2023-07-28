@@ -16,7 +16,6 @@
 int server_sockfd = 0, client_sockfd = 0;
 ClientList *root, *now;
 extern const int LENGTH_USERCODE=6;
-char tmp_user_code[LENGTH_USERCODE];
 
 int equals(char *w1, char *w2, int length){
     char ww1[length];
