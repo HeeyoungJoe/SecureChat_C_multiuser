@@ -148,7 +148,7 @@ void client_handler(void *p_client) {
 
         //[11]-[다른 유저 코드]-[다른 유저 이름] 새로 들어온 클라이언트에게 기존의 클라이언트 정보 전달 -Done
         //Segmentation fault core dumped
-        printf("TMP not empty:%s",tmp->name);
+        printf("TMP not empty:%s",root->user_code);
         while(tmp!=NULL){            
             char *code_recv_message=(char*)malloc(sizeof(char)*(2+LENGTH_USERCODE*2)+1);
             strncpy(code_recv_message,'11',2);
