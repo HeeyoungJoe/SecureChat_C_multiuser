@@ -159,7 +159,7 @@ void client_handler(void *p_client) {
             tmp=tmp->link;
         } */
 
-        //[12]-[유저 코드]-[유저 이름] 다른 모두에게 -Done
+        //[12]-[유저 코드]-[유저 이름] 다른 모두에게 -Done /Test Done
         char code_update_message[50];
         strncpy(code_update_message,"12",2);
         strncpy(code_update_message+2,np->user_code,6);
