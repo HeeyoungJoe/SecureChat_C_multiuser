@@ -67,7 +67,7 @@ void selective_message_send(ClientList *np, char tmp_buffer[]){
                 strncpy(message,"14",2);
                 strncpy(message+2,recv_user_code,6);
                 strncpy(message+8,tmp->public_key,128);
-                printf("Send to user %d: \"%s\" \n", np->data, message;
+                printf("Send to user %d: \"%s\" \n", np->data, message);
                 send(np->data, message, message_length, 0);
 
                 return 0;
@@ -134,7 +134,7 @@ void client_handler(void *p_client) {
             strncpy(code_recv_message,'11',2);
             strncpy(code_recv_message+2,tmp->user_code,6);
             strncpy(code_recv_message+8,tmp->name,strlen(tmp->name));
-            send(np->data,code_recv_message,strlen(code_recv_message));
+            send(np->data,code_recv_message,strlen(code_recv_message),0);
             tmp=tmp->link;
         }
 
