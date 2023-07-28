@@ -15,7 +15,8 @@
 // Global variables
 int server_sockfd = 0, client_sockfd = 0;
 ClientList *root, *now;
-char tmp_user_code[7];
+extern const int LENGTH_USERCODE=6;
+char tmp_user_code[LENGTH_USERCODE];
 
 int equals(char *w1, char *w2, int length){
     char ww1[length];
@@ -61,12 +62,12 @@ void send_to_all_clients(ClientList *np, char tmp_buffer[]) {
 
 int selective_message_send(ClientList *np, char tmp_buffer[]){
 
-    char selector[3],user_code[7];
+    char selector[3],user_code[LENGTH_USERCODE];
     strncpy(selector,tmp_buffer,2);
     strncpy(user_code,tmp_buffer+2,6);
 
     if (equals(selector,"01",2)){//공개키 요구
-        char recv_user_code[7];
+        char recv_user_code[LENGTH_USERCODE];
         strncpy(recv_user_code,tmp_buffer+8,6);
         ClientList *tmp = root->link;
         while (tmp != NULL) {
@@ -92,7 +93,7 @@ int selective_message_send(ClientList *np, char tmp_buffer[]){
     }
     else if (equals(selector,"03",2))
     {
-        char recv_user_code[7];
+        char recv_user_code[LENGTH_USERCODE];
         strncpy(recv_user_code,tmp_buffer+8,6);
         ClientList *tmp = root->link;
         while (tmp != NULL) {
@@ -135,7 +136,7 @@ void client_handler(void *p_client) {
         
         //[10]-[내 user code]-Done
         //Secgmentation fault core dumped
-        char code_init_message[9];
+        char code_init_message[2+LENGTH_USERCODE];
         strncpy(code_init_message,"10",2);
         strncpy(code_init_message+2,np->user_code,6);
         printf("User code sent: %s",code_init_message);
