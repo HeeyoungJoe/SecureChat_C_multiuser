@@ -12,7 +12,7 @@ typedef struct ClientNode {
 } ClientList;
 
 ClientList *newNode(int sockfd, char* ip,char*user_code) {
-    ClientList *np = (ClientList *)malloc( sizeof(ClientList) );
+    ClientList *np = (ClientList *)malloc( sizeof(ClientList) +1);
     np->data = sockfd;
     np->prev = NULL;
     np->link = NULL;
