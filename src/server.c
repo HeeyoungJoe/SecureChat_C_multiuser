@@ -59,7 +59,7 @@ void send_to_all_clients(ClientList *np, char tmp_buffer[]) {
 //03->귓속말 메세지 [03]-[보내는 user code]-[받는 user code]-[암호화 된 메세지]
 
 
-void selective_message_send(ClientList *np, char tmp_buffer[]){
+int selective_message_send(ClientList *np, char tmp_buffer[]){
 
     char selector[3],user_code[7];
     strncpy(selector,tmp_buffer,2);
@@ -81,7 +81,7 @@ void selective_message_send(ClientList *np, char tmp_buffer[]){
                 printf("Send to user %d: \"%s\" \n", np->data, message);
                 send(np->data, message, message_length, 0);
 
-                return 0;
+                return 1;
             }
             tmp = tmp->link;
         }
@@ -106,16 +106,17 @@ void selective_message_send(ClientList *np, char tmp_buffer[]){
                 printf("Send to sockfd %d: \"%s\" \n", tmp->data, message);
                 send(tmp->data, message, message_length, 0);
 
-                return 0;
+                return 1;
             }
             tmp = tmp->link;
         }
     }
     else{
         printf("Selector error: %s",selector);
+        return 0;
     }
     
-    return 0;
+    return 1;
 }
 void client_handler(void *p_client) {
     int leave_flag = 0;
@@ -134,7 +135,6 @@ void client_handler(void *p_client) {
         
         //[10]-[내 user code]-Done
         char code_init_message[9];
-        int point=2;
         strncpy(code_init_message,"10",2);
         strncpy(code_init_message+2,np->user_code,6);
         send(np->data,code_init_message,strlen(code_init_message),0);
@@ -154,7 +154,7 @@ void client_handler(void *p_client) {
         strncpy(code_update_message,"11",2);
         strncpy(code_update_message+2,np->user_code,6);
         strncpy(code_update_message+8,np->name,strlen(np->name));
-        send_to_all_clients(np->data,code_update_message);
+        send_to_all_clients(np,code_update_message);
 
 
         strncpy(np->name, nickname, LENGTH_NAME);
