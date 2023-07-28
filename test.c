@@ -3,8 +3,8 @@
 #include <string.h>
 
 typedef struct Stub{
-    char *name;
-    char *usercode;
+    char name[30];
+    char usercode[30];
 }Stub;
 
 
@@ -28,8 +28,8 @@ int main(){
     printf("Start\n");
 
     Stub *newstub=malloc(sizeof(Stub)+1);
-    newstub->usercode=malloc(sizeof(char)*6+1);
-    newstub->name=malloc(sizeof(char)*31+1);
+    //newstub->usercode=malloc(sizeof(char)*6+1);
+    //newstub->name=malloc(sizeof(char)*31+1);
     
     strncpy(newstub->name,"Joe",3);
     strncpy(newstub->usercode,"001",3);
