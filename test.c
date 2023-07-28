@@ -18,7 +18,9 @@ char* inc(char *num, char* p)//https://stackoverflow.com/questions/891715/recurs
 }
 
 int main(){
-    char num[10]="001";
-    printf("%s",inc(num,num+2));
+    char code_init_message[9];
+    strncpy(code_init_message,"10",2);
+    strncpy(code_init_message+2,"100032",6);
+    printf("User code sent: %s",code_init_message);
     return 0;
 }
