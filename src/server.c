@@ -159,12 +159,13 @@ void client_handler(void *p_client) {
             tmp=tmp->link;
         } */
 
-        //[11]-[유저 코드]-[유저 이름] 다른 모두에게 -Done
+        //[12]-[유저 코드]-[유저 이름] 다른 모두에게 -Done
         char code_update_message[50];
-        strncpy(code_update_message,"11",2);
+        strncpy(code_update_message,"12",2);
         strncpy(code_update_message+2,np->user_code,6);
         strncpy(code_update_message+8,np->name,strlen(np->name));
         send_to_all_clients(np,code_update_message);
+        printf("신고식 legend:%s",code_update_message);
 
 
 
