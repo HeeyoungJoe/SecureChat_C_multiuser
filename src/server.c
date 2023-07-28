@@ -17,7 +17,18 @@ int server_sockfd = 0, client_sockfd = 0;
 ClientList *root, *now;
 char tmp_user_code[7];
 
-
+bool equals(char *w1, char *w2, int length){
+    char *ww1[length];
+    char *ww2[length];
+    strncpy(ww1,w1,length);
+    strncpy(ww2,w2,length);
+    if(ww1==ww2){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 void catch_ctrl_c_and_exit(int sig) {
     ClientList *tmp;
     while (root != NULL) {
@@ -54,7 +65,7 @@ void selective_message_send(ClientList *np, char tmp_buffer[]){
     strncpy(selector,tmp_buffer,2);
     strncpy(user_code,tmp_buffer+2,6);
 
-    if (selector == "01"){//공개키 요구
+    if (equals(selector,"01",2)){//공개키 요구
         char recv_user_code[7];
         strncpy(recv_user_code,tmp_buffer+8,6);
         ClientList *tmp = root->link;
@@ -75,11 +86,11 @@ void selective_message_send(ClientList *np, char tmp_buffer[]){
             tmp = tmp->link;
         }
     }
-    else if (selector == "02")
+    else if (equals(selector,"02",2))
     {
         send_to_all_clients(np,tmp_buffer);
     }
-    else if (selector == "03")
+    else if (equals(selector,"03",2))
     {
         char recv_user_code[7];
         strncpy(recv_user_code,tmp_buffer+8,6);
