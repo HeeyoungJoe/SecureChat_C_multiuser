@@ -77,7 +77,7 @@ void selective_message_send(ClientList *np, char tmp_buffer[]){
     }
     else if (selector == "02")
     {
-        send_to_all_clients(np,tmp_buffer)   
+        send_to_all_clients(np,tmp_buffer);
     }
     else if (selector == "03")
     {
@@ -104,7 +104,7 @@ void selective_message_send(ClientList *np, char tmp_buffer[]){
         printf("Selector error: %s",selector);
     }
     
-
+    return 0;
 }
 void client_handler(void *p_client) {
     int leave_flag = 0;
