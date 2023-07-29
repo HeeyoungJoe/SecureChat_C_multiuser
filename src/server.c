@@ -303,7 +303,7 @@ int main()
         printf("ClientNode appended to the list:%s\n",c->user_code);
 
         // Prepare Argument for client handler
-        struct client_handler_args args;
+        struct client_handler_arg args;
         args.p_client = c;
         args.root_node = root;
 
