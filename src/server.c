@@ -18,6 +18,11 @@ int server_sockfd = 0, client_sockfd = 0;
 ClientList *root, *now;
 extern const int LENGTH_USERCODE=6;
 
+struct client_handler_arg {
+    ClientList* p_client;
+    ClientList* root_node;
+};
+
 int equals(char *w1, char *w2, int length){
     char ww1[length];
     char ww2[length];
@@ -297,8 +302,14 @@ int main()
         now = c;
         printf("ClientNode appended to the list:%s\n",c->user_code);
 
+        // Prepare Argument for client handler
+        struct client_handler_args args;
+        args.p_client = c;
+        args.root_node = root;
+
+        // Call client handler thread
         pthread_t id;
-        if (pthread_create(&id, NULL, (void *)client_handler, (void *)c) != 0) {
+        if (pthread_create(&id, NULL, (void *)client_handler, (void *)&args) != 0) {
             perror("Create pthread error!\n");
             exit(EXIT_FAILURE);
         }
