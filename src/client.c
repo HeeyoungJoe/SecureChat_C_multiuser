@@ -9,24 +9,54 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #include "proto.h"
+#include "client.h"
 #include "string.h"
 
 // Global variables
 volatile sig_atomic_t flag = 0;
 int sockfd = 0;
 char nickname[LENGTH_NAME] = {};
+UserList *root, *now;
 
 void catch_ctrl_c_and_exit(int sig) {
     flag = 1;
 }
 
+//if message startswith 13, it is a secret message
+//ask for the public key of sender to server
+//receive the public key of sender from server
+//decrypt the message
+//show in screen
+
+void recv_secret_handler(){//called as a new
+
+}
+void send_secret_handler(){ //called in send_msg_handler
+
+}
 void recv_msg_handler() {
+    char tmp_user_code[6];
     char receiveMessage[LENGTH_SEND] = {};
     while (1) {
+        //if startswith 11, receive usercode and username pair
+        //if startswith 14, receive usercode and public key pair 
         int receive = recv(sockfd, receiveMessage, LENGTH_SEND, 0);
         if (receive > 0) {
-            printf("\r%s\n", receiveMessage);
-            str_overwrite_stdout();
+            if(strncmp(receiveMessage,"11",2)==0){
+                //save it in struct
+                root->link=newNode(sockfd,user_name,user_code);
+            }
+            else if (strncmp(receiveMessage,"14",2)==0)
+            {
+            
+            }
+            else if (strncmp(receiveMessage,"02",2)==0)
+            {
+                printf("\r%s\n", receiveMessage);
+                str_overwrite_stdout();
+            }
+            
+            
         } else if (receive == 0) {
             break;
         } else { 
@@ -41,6 +71,10 @@ void send_msg_handler() {
         str_overwrite_stdout();
         while (fgets(message, LENGTH_MSG, stdin) != NULL) {
             str_trim_lf(message, LENGTH_MSG);
+            if(strncmp(message,"SECRET",6)==0){
+                printf("Send secret message to: ")//
+                //list of other users
+            }
             if (strlen(message) == 0) {
                 str_overwrite_stdout();
             } else {
@@ -102,8 +136,25 @@ int main()
     getpeername(sockfd, (struct sockaddr*) &server_info, (socklen_t*) &s_addrlen);
     printf("Connect to Server: %s:%d\n", inet_ntoa(server_info.sin_addr), ntohs(server_info.sin_port));
     printf("You are: %s:%d\n", inet_ntoa(client_info.sin_addr), ntohs(client_info.sin_port));
-
+    print("If you want to send a secret message, type SECRET\n\n");
     send(sockfd, nickname, LENGTH_NAME, 0);
+    
+    char receiveMessage[LENGTH_SEND]
+    int receive = recv(sockfd, receiveMessage, LENGTH_SEND, 0);
+    char userCode[6];
+    if (receive > 0) { //내 user code를 받을 땐 10으로 시작 
+        if(strncmp(receiveMessage,"10",2)==0){
+            strncpy(userCode,receiveMessage+2,6);
+        }
+        else{
+            printf("[CLIENT.C/MAIN]: Didn't receive client code\n");
+            userCode="000000";
+        }
+    }
+
+    // Root user node 
+    root = newNode(sockfd, nickname,user_code);
+    now = root;
 
     pthread_t send_msg_thread;
     if (pthread_create(&send_msg_thread, NULL, (void *) send_msg_handler, NULL) != 0) {

@@ -4,7 +4,7 @@
 typedef struct ClientNode {
     int data;
     char user_code[6];
-    char public_key[129];
+    char public_key[247];
     struct ClientNode* prev;
     struct ClientNode* link;
     char ip[16];

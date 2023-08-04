@@ -8,7 +8,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include <mysql.h>
+#include <mysql/mysql.h>
 #include "proto.h"
 #include "server.h"
 
@@ -51,7 +51,7 @@ void catch_ctrl_c_and_exit(int sig) {
 void send_to_all_clients(ClientList *np, char tmp_buffer[]) {
     ClientList *tmp = root->link;
     while (tmp != NULL) {
-        if (np->data != tmp->data) { // all clients except itself.
+        if (np->data != tmp->data) { // all clients except server
             printf("Send to sockfd %d: \"%s\" \n", tmp->data, tmp_buffer);
             send(tmp->data, tmp_buffer, LENGTH_SEND, 0);
         }
@@ -143,7 +143,6 @@ void client_handler(void *p_client) {
         strncpy(np->name, nickname, LENGTH_NAME);
         printf("%s(%s)(%d) join the chatroom.\n", np->name, np->ip, np->data);
         sprintf(send_buffer, "%s(%s) join the chatroom.", np->name, np->ip);
-        //send_to_all_clients(np, send_buffer); 
 
         //[10]-[내 user code]-Done/Test done
         char *code_init_message=(char*)malloc(sizeof(char)*(2+LENGTH_USERCODE));
