@@ -21,19 +21,11 @@ int main(){
     root = newNode(sockfd, nickname,user_code,public_key);
     now = root;
 
-    printf("\n[TEST.C/NEW NODE] Root: %s has %s as code and %s as public_key\n",root->user_name,root->user_code,root->public_key);
-
-    // Test node username update 
-    updateUserName(root,user_code,"Keith");
-    printf("\n[TEST.C/UPDATE USERNAME] Root: %s has %s as code and %s as public_key\n",root->user_name,root->user_code,root->public_key);
-
+    printNode(root, "[TEST.C/NEW NODE]");
 
     // Test node public key update 
     updatePublicKey(root,user_code,"asdk;ljf;394091");
-    printf("\n[TEST.C/UPDATE PUBLIC KEY] Root: %s has %s as code and %s as public_key\n",root->user_name,root->user_code,root->public_key);
-
-    // Test get public key
-    printf("\n[TEST.C/GET PUBLIC KEY] Root: %s has  %s as public_key\n",root->user_code,getPublicKey(root,root->user_code));
-
+    printNode(root, "[TEST.C/UPDATE Public key] ");
+    
     return 0;
 }
