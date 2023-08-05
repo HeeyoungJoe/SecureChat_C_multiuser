@@ -84,7 +84,7 @@ char* getPublicKey(UserList *li, char*user_code){
                     return p->public_key;
                 }
                 else{
-                    print("[CLIENT.H/GETPUBLICKEY]: User has no PUBLIC KEY");
+                    printf("[CLIENT.H/GETPUBLICKEY]: User has no PUBLIC KEY");
                 }
             }
             else{
