@@ -71,6 +71,7 @@ UserList *updateUserName(UserList * li,char*user_code,char*user_name){
     }
     if(isUpdated==0){
         printf("[CLIENT.H/UPDATEUSERNAME]: failed to find user, failed to update USER NAME\n");
+    }
 }
 
 char* getPublicKey(UserList *li, char*user_code){
