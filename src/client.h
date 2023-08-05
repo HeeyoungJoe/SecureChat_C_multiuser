@@ -35,9 +35,9 @@ UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
     UserList *p=li; //while문으로 변경하기 
     int isUpdated=0;
     while(p){
-        if(user_code && public_key){ //if not null
+        if(user_code && p->user_code){ //if not null
             if(strncmp(p->user_code,user_code,LENGTH_CODE)==0){ //찾는 유저가 맞다면
-                strncpy((p->public_key),public_key,strlen(public_key));     
+                strncpy(p->public_key,public_key,strlen(public_key));     
                 isUpdated=1;
                 break;
             }
