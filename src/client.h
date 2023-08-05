@@ -27,7 +27,7 @@ void printNode(UserList* np, char* announcement){
     strncpy(public_key,np->public_key,LENGTH_KEY);
     public_key[-1]="\0";
 
-    if(announcent[-1]!="\0"){       
+    if(announcement[-1]!="\0"){       
         char* new_announcement=(char*)malloc(sizeof(char)*(strlen(announcement)+1));
         strncpy(new_announcement,announcement,strlen(announcement));
         new_announcement[strlen(announcement)]="\0";
