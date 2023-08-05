@@ -92,7 +92,7 @@ char* getPublicKey(UserList *li, char*user_code){
 
         }
     }
-    print("[CLIENT.H/GETPUBLICKEY]: Failed to find user");
+    printf("[CLIENT.H/GETPUBLICKEY]: Failed to find user");
     return public_key;
 }
 
