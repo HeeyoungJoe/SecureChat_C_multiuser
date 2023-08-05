@@ -13,7 +13,7 @@ int main(){
     strncpy(nickname,"Jackie",6);
     char user_code[6];
     strncpy(user_code,"000111",6);
-    char public_key[247]={"0"};
+    char public_key[247]={"0"};//길이는 1임
 
     // Test node creation
     // Root user node 

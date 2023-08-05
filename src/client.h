@@ -53,13 +53,14 @@ UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
         printf("[CLIENT.H/UPDATEPUBLICKEY]: failed to find user, failed to update PUBLIC KEY\n");
     }
 }
-UserList *updateUserName(UserList * li,char*user_code,char*user_name){
+UserList *updateUserName(UserList * root,char*user_code,char*user_name){
 
-    UserList *p=li; //while문으로 변경하기 
+    UserList *p=root; //while문으로 변경하기 
     int isUpdated=0;
-    while(p){
-        if(user_code){ //if not null
+    while(p){ //while p is not null 
+        if(user_code and p->user_code){ //if not null
             if(strncmp(p->user_code,user_code,6)==0){ //찾는 유저가 맞다면
+                printf("\n[CLIENT.H/UPDATE USERNAME] Found matching user %s",p->user_name)
                 strncpy((p->user_name),user_name,strlen(user_name));
                 isUpdated=1;
             }
@@ -67,6 +68,10 @@ UserList *updateUserName(UserList * li,char*user_code,char*user_name){
                 p=p->link;
             }
 
+        }
+        else{
+            printf('\n[CLIENT.H UPDATE USERNAME] Either the given user code or the pointer's user code is null);
+            break;
         }
     }
     if(isUpdated==0){
