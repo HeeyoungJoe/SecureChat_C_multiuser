@@ -140,7 +140,7 @@ int main()
     send(sockfd, nickname, LENGTH_NAME, 0);
     
     // My Keys
-    char public_key[247]={0};
+    char public_key[LENGTH_CODE]={0};
 
     // Handshake with Server
     char receiveMessage[LENGTH_SEND];

@@ -3,7 +3,7 @@
 
 typedef struct UserNode {
     int data;
-    char user_code[6];
+    char user_code[LENGTH_CODE];
     char public_key[248]; //initialized -> 0으로 시작 not initialized->1로 시작
     struct UserNode* prev;
     struct UserNode* link;
@@ -22,8 +22,8 @@ UserList *newNode(int sockfd, char* user_name,char*user_code,char* public_key) {
     else{
         strncpy(np->user_name,"1",1);
     }
-    strncpy(np->public_key, public_key,247);
-    strncpy(np->user_code,user_code,6);
+    strncpy(np->public_key, public_key,LENGTH_CODE);
+    strncpy(np->user_code,user_code,LENGTH_CODE);
     return np;
 }
 
@@ -33,16 +33,18 @@ UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
     int isUpdated=0;
     while(p){
         if(user_code){ //if not null
-            if(strncmp(p->user_code,user_code,6)==0){ //찾는 유저가 맞다면
+            if(strncmp(p->user_code,user_code,LENGTH_CODE)==0){ //찾는 유저가 맞다면
                 if(strncmp(p->public_key,"0",1)==0){
-                    strncpy((p->public_key+1),public_key,247);
+                    strncpy((p->public_key+1),public_key,LENGTH_CODE);
                 }
                 else{
                     strncpy(p->public_key,"0",1);
-                    strncpy((p->public_key+1),public_key,247);
+                    strncpy((p->public_key+1),public_key,LENGTH_CODE);
                 }
                 isUpdated=1;
+                break;
             }
+
             else{
                 p=p->link;
             }
@@ -59,10 +61,12 @@ UserList *updateUserName(UserList * root,char*user_code,char*user_name){
     int isUpdated=0;
     while(p){ //while p is not null 
         if((user_code) && (p->user_code)){ //if not null
-            if(strncmp(p->user_code,user_code,6)==0){ //찾는 유저가 맞다면
+            if(strncmp(p->user_code,user_code,LENGTH_CODE)==0){ //찾는 유저가 맞다면
                 printf("\n[CLIENT.H/UPDATE USERNAME] Found matching user %s",p->user_name);
+                memset(p->user_name,0,sizeof(char)*LENGTH_NAME)
                 strncpy((p->user_name),user_name,strlen(user_name));
                 isUpdated=1;
+                break;
             }
             else{
                 p=p->link;
@@ -70,7 +74,7 @@ UserList *updateUserName(UserList * root,char*user_code,char*user_name){
 
         }
         else{
-            printf('\n[CLIENT.H UPDATE USERNAME] Either the given user code or the pointer\'s user code is null');
+            printf('\n[CLIENT.H UPDATE USERNAME] Either the given user code or the pointers user code is null');
             break;
         }
     }
@@ -80,11 +84,11 @@ UserList *updateUserName(UserList * root,char*user_code,char*user_name){
 }
 
 char* getPublicKey(UserList *li, char*user_code){
-    char public_key[247];
+    char public_key[LENGTH_CODE];
     UserList *p=li; //while문으로 변경하기 
     while(p){
         if(user_code){ //if not null
-            if(strncmp(p->user_code,user_code,6)==0){ //찾는 유저가 맞다면
+            if(strncmp(p->user_code,user_code,LENGTH_CODE)==0){ //찾는 유저가 맞다면
                 if(p->public_key){
                     return p->public_key;
                 }

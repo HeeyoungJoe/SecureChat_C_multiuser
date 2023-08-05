@@ -3,8 +3,8 @@
 
 typedef struct ClientNode {
     int data;
-    char user_code[6];
-    char public_key[247];
+    char user_code[LENGTH_CODE];
+    char public_key[LENGTH_CODE];
     struct ClientNode* prev;
     struct ClientNode* link;
     char ip[16];
@@ -18,7 +18,7 @@ ClientList *newNode(int sockfd, char* ip,char*user_code) {
     np->link = NULL;
     strncpy(np->ip, ip, 16);
     strncpy(np->name, "NULL", 5);
-    strncpy(np->user_code,user_code,6);
+    strncpy(np->user_code,user_code,LENGTH_CODE);
     return np;
 }
 
