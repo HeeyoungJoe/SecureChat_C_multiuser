@@ -29,7 +29,7 @@ int main(){
 
 
     // Test node public key update 
-    updatePublicKey(root,user_code,"asdk;ljf;aldjfoiewr10394091");
+    updatePublicKey(root,user_code,"asdk;ljf;394091");
     printf("\n[TEST.C/UPDATE PUBLIC KEY] Root: %s has %s as code and %s as public_key\n",root->user_name,root->user_code,root->public_key);
 
     // Test get public key
