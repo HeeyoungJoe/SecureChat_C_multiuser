@@ -19,6 +19,7 @@ UserList *newNode(int sockfd, char* user_name,char*user_code,char* public_key) {
     np->prev = NULL;
     np->link = NULL;
 
+    strncpy(np->user_code,user_code,LENGTH_CODE);
     if(user_name){
         np->user_name=(char*) malloc(sizeof(char)*LENGTH_NAME);
         strncpy((np->user_name), user_name,strlen(user_name));
@@ -27,7 +28,6 @@ UserList *newNode(int sockfd, char* user_name,char*user_code,char* public_key) {
     if(public_key){
         strncpy((np->public_key), public_key,strlen(public_key));
     }
-    strncpy(np->user_code,user_code,LENGTH_CODE);
     return np;
 }
 UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
@@ -37,16 +37,20 @@ UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
     while(p){
         if(user_code && p->user_code){ //if not null
             if(strncmp(p->user_code,user_code,LENGTH_CODE)==0){ //찾는 유저가 맞다면
+                printf("\n[CLIENT.H/UPDATE PUBLIC KEY] Found matching user code %s",p->user_code);
                 memset(p->public_key,0,sizeof(char)*LENGTH_KEY);
                 strncpy(p->public_key,public_key,strlen(public_key));     
                 isUpdated=1;
                 break;
             }
-
             else{
                 p=p->link;
             }
 
+        }
+        else{
+            
+            printf('\n[CLIENT.H UPDATE PUBLIC KEY] Either the given user code or the pointers user code is null');
         }
     }
     if(isUpdated==0){
