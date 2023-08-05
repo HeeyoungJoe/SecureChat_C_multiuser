@@ -263,8 +263,8 @@ int main()
     MYSQL_ROW row;
     char *server = "localhost";
     char *user = "root";
-    char *password = "PASSWORD"; /* set me first */
-    char *database = "mysql";
+    char *password = "Yuzuka601@"; /* set me first */
+    char *database = "user_database";
     conn = mysql_init(NULL);
     /* Connect to database */
     if (!mysql_real_connect(conn, server,
