@@ -152,7 +152,7 @@ int main()
         }
         else{
             printf("[CLIENT.C/MAIN]: Didn't receive client code\n");
-            userCode="000000";
+            strncpy(userCode,"000000",6);
         }
     }
 
