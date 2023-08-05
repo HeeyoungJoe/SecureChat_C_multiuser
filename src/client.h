@@ -70,7 +70,7 @@ UserList *updateUserName(UserList * root,char*user_code,char*user_name){
 
         }
         else{
-            printf('\n[CLIENT.H UPDATE USERNAME] Either the given user code or the pointer's user code is null);
+            printf('\n[CLIENT.H UPDATE USERNAME] Either the given user code or the pointer\'s user code is null');
             break;
         }
     }
