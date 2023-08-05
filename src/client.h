@@ -1,3 +1,5 @@
+#include "proto.h"
+
 #ifndef LIST
 #define LIST
 
@@ -63,7 +65,7 @@ UserList *updateUserName(UserList * root,char*user_code,char*user_name){
         if((user_code) && (p->user_code)){ //if not null
             if(strncmp(p->user_code,user_code,LENGTH_CODE)==0){ //찾는 유저가 맞다면
                 printf("\n[CLIENT.H/UPDATE USERNAME] Found matching user %s",p->user_name);
-                memset(p->user_name,0,sizeof(char)*LENGTH_NAME)
+                memset(p->user_name,0,sizeof(char)*LENGTH_NAME);
                 strncpy((p->user_name),user_name,strlen(user_name));
                 isUpdated=1;
                 break;
