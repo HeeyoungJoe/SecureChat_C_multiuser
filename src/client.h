@@ -12,7 +12,7 @@ typedef struct UserNode {
 
 UserList *newNode(int sockfd, char* user_name,char*user_code,char* public_key) {
     UserList *np = (UserList *)malloc( sizeof(UserList) +1);
-    np->data=sockfd
+    np->data=sockfd;
     np->prev = NULL;
     np->link = NULL;
     if(public_key){

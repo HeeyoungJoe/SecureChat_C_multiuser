@@ -72,7 +72,7 @@ void send_msg_handler() {
         while (fgets(message, LENGTH_MSG, stdin) != NULL) {
             str_trim_lf(message, LENGTH_MSG);
             if(strncmp(message,"SECRET",6)==0){
-                printf("Send secret message to: ")//
+                printf("Send secret message to: ");
                 //list of other users
             }
             if (strlen(message) == 0) {
@@ -140,7 +140,7 @@ int main()
     send(sockfd, nickname, LENGTH_NAME, 0);
     
     // My Keys
-    char public_key=[247]={0};
+    char public_key[247]={0};
 
     // Handshake with Server
     char receiveMessage[LENGTH_SEND];
@@ -157,7 +157,7 @@ int main()
     }
 
     // Root user node 
-    root = newNode(sockfd, nickname,user_code);
+    root = newNode(sockfd, nickname,user_code,public_key);
     now = root;
 
     pthread_t send_msg_thread;
