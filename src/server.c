@@ -8,7 +8,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include <mysql.h>
+#include <mysql/mysql.h>
 #include "proto.h"
 #include "server.h"
 
