@@ -44,7 +44,7 @@ void recv_msg_handler() {
         if (receive > 0) {
             if(strncmp(receiveMessage,"11",2)==0){
                 //save it in struct
-                root->link=newNode(sockfd,user_name,user_code);
+                root->link=newNode(sockfd,user_name,user_code,NULL);
             }
             else if (strncmp(receiveMessage,"14",2)==0)
             {
@@ -139,7 +139,11 @@ int main()
     print("If you want to send a secret message, type SECRET\n\n");
     send(sockfd, nickname, LENGTH_NAME, 0);
     
-    char receiveMessage[LENGTH_SEND]
+    // My Keys
+    char public_key=[247]={0};
+
+    // Handshake with Server
+    char receiveMessage[LENGTH_SEND];
     int receive = recv(sockfd, receiveMessage, LENGTH_SEND, 0);
     char userCode[6];
     if (receive > 0) { //내 user code를 받을 땐 10으로 시작 
