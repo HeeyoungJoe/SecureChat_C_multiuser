@@ -68,8 +68,8 @@ UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
         if(user_code && p->user_code){ //if not null
             if(strncmp(p->user_code,user_code,LENGTH_CODE)==0){ //찾는 유저가 맞다면
                 printNode(p,"[CLIENT.H/UPDATE PUBLIC KEY - found user] ");
-                memset(p->public_key,0,sizeof(char)*LENGTH_KEY);
                 strncpy(p->public_key,public_key,strlen(public_key));     
+                printf("!!WHAT?? %s",p->public_key);
                 isUpdated=1;
                 break;
             }

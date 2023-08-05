@@ -14,7 +14,7 @@ int main(){
     strncpy(nickname,"Jackie",LENGTH_NAME);
     char user_code[LENGTH_CODE];
     strncpy(user_code,"000111",LENGTH_CODE);
-    char public_key[247]={"0"};//길이는 1임
+    char public_key[247]="takarazukahanagumi0601";//길이는 1임
 
     // Test node creation
     // Root user node 
