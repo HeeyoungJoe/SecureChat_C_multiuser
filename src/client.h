@@ -12,6 +12,35 @@ typedef struct UserNode {
     char* user_name;
 } UserList;
 
+void printNode(UserList* np, char* announcement){
+    char* user_code=(char*)malloc(sizeof(char)*(LENGTH_CODE+1));
+    strncpy(user_code,np->user_code,LENGTH_CODE);
+    user_code[-1]="\0";
+
+    
+    char* user_name=(char*)malloc(sizeof(char)*(LENGTH_NAME+1));
+    strncpy(user_name,np->user_name,LENGTH_NAME);
+    user_name[-1]="\0";
+
+    
+    char* public_key=(char*)malloc(sizeof(char)*(LENGTH_KEY+1));
+    strncpy(public_key,np->public_key,LENGTH_KEY);
+    public_key[-1]="\0";
+
+    if(announcent[-1]!="\0"){       
+        char* new_announcement=(char*)malloc(sizeof(char)*(strlen(announcement)+1));
+        strncpy(new_announcement,announcement,strlen(announcement));
+        new_announcement[strlen(announcement)]="\0";
+    }
+    else{
+        char* new_announcement=(char*)malloc(sizeof(char)*(strlen(announcement)));
+        strncpy(new_announcement,announcement,strlen(announcement));
+    }
+
+    printf("[%s] Node at given position is %s / %s / %s\n",announcement,user_code,user_name,public_key);
+
+}
+
 UserList *newNode(int sockfd, char* user_name,char*user_code,char* public_key) {
     UserList *np = (UserList *)malloc( sizeof(UserList) +1);
 
@@ -28,7 +57,7 @@ UserList *newNode(int sockfd, char* user_name,char*user_code,char* public_key) {
     if(public_key){
         strncpy((np->public_key), public_key,strlen(public_key));
     }
-    printf("[CLIENT.H/NEW NODE] Wrap up: user code %s",np->user_code);
+    printNode(np,"[CLIENT.H/NEW NODE]");
     return np;
 }
 UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
@@ -38,7 +67,7 @@ UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
     while(p){
         if(user_code && p->user_code){ //if not null
             if(strncmp(p->user_code,user_code,LENGTH_CODE)==0){ //찾는 유저가 맞다면
-                printf("\n[CLIENT.H/UPDATE PUBLIC KEY] Found matching user code %s",p->user_code);
+                printNode(p,"[CLIENT.H/UPDATE PUBLIC KEY - found user] ");
                 memset(p->public_key,0,sizeof(char)*LENGTH_KEY);
                 strncpy(p->public_key,public_key,strlen(public_key));     
                 isUpdated=1;
@@ -65,7 +94,7 @@ UserList *updateUserName(UserList * root,char*user_code,char*user_name){
     while(p){ //while p is not null 
         if((user_code) && (p->user_code)){ //if not null
             if(strncmp(p->user_code,user_code,LENGTH_CODE)==0){ //찾는 유저가 맞다면
-                printf("\n[CLIENT.H/UPDATE USERNAME] Found matching user %s",p->user_name);
+                printNode(p,"[CLIENT.H/UPDATE USERNAME- found user] ");
                 memset(p->user_name,0,sizeof(char)*LENGTH_NAME);
                 strncpy((p->user_name),user_name,strlen(user_name));
                 isUpdated=1;
