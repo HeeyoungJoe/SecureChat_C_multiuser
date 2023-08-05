@@ -28,6 +28,7 @@ UserList *newNode(int sockfd, char* user_name,char*user_code,char* public_key) {
     if(public_key){
         strncpy((np->public_key), public_key,strlen(public_key));
     }
+    printf("[CLIENT.H/NEW NODE] Wrap up: user code %s",np->user_code);
     return np;
 }
 UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
