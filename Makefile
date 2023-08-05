@@ -5,7 +5,7 @@ SRC=src
 
 all: server.out client.out
 server.out: server.o
-	$(CC) $(CFLAGS) $(LIBS) -o server.out server.o -lmysqlclient
+	$(CC) $(CFLAGS) $(LIBS) -o server.out server.o -l /usr/include/mysql -L /usr/lib/mysql -lmysqlclient
 client.out: client.o string.o
 	$(CC) $(CFLAGS) $(LIBS) -o client.out client.o string.o
 server.o: $(SRC)/server.c
