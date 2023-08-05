@@ -1,43 +1,21 @@
 #include <stdlib.h>
 #include<stdio.h>
 #include <string.h>
-
-typedef struct Stub{
-    char name[30];
-    char usercode[30];
-}Stub;
+#include "src/client.h"
 
 
-char* inc(char *num, char* p)//https://stackoverflow.com/questions/891715/recursive-incrementer
-{   
-    if( *p>='0' && *p<='8' )
-    {
-        (*p)++;       //==> change
-    }
-    else if ( *p=='9' )
-    {
-        *p = '0';
-        inc(num, --p);
-    }
-
-    return num;
-}
+UserList *root, *now;
 
 int main(){
 
-    printf("Start\n");
-
-    Stub *newstub=malloc(sizeof(Stub)+1);
-    //newstub->usercode=malloc(sizeof(char)*6+1);
-    //newstub->name=malloc(sizeof(char)*31+1);
-    
-    strncpy(newstub->name,"Joe",3);
-    strncpy(newstub->usercode,"001",3);
-    printf("Stub:%s\n",newstub->usercode);
-
-    char code_init_message[9];
-    strncpy(code_init_message,"10",2);
-    strncpy(code_init_message+2,newstub->usercode,3);
-    printf("User code sent: %s",code_init_message);
+    int sockfd=38293;
+    char nickname[100];
+    strncpy(nickname,"Jackie",6);
+    char user_code[6];
+    strncpy(user_code,"000111",6);
+    char public_key[247]={"0"};
+    // Root user node 
+    root = newNode(sockfd, nickname,user_code,public_key);
+    now = root;
     return 0;
 }
