@@ -17,18 +17,48 @@ UserList *newNode(int sockfd, char* user_name,char*user_code,char* public_key) {
     np->data=sockfd;
     np->prev = NULL;
     np->link = NULL;
-    if(public_key){
+
+    // Integrity check for user name
+    // If user name is initialized, startwith 0
+    // If user naem was never given, startwith 1
+    if(user_name){
         strncpy(np->user_name,"0",1);
         strncpy((np->user_name+1), user_name,strlen(user_name));
     }
     else{
         strncpy(np->user_name,"1",1);
     }
-    strncpy(np->public_key, public_key,LENGTH_CODE);
+    
+    // Integrity check for public key
+    // If public key is initialized, startwith 0
+    // If public key was never given, startwith 1
+    if(public_key){
+        strncpy(np->public_key,"0",1);
+        strncpy((np->public_key+1), public_key,strlen(public_key));
+    }
+    else{
+        strncpy(np->user_name,"1",1);
+    }
     strncpy(np->user_code,user_code,LENGTH_CODE);
     return np;
 }
 
+void printUser(int type, UserList* user){
+    //type==1: user_name
+    //type==2: user_code 
+    //type==3: public_key 
+    if(type==1){
+        printf("%s",user->user_name+1);
+    }
+    else if(type==2){
+        printf("%s",user->user_code+1);
+    }
+    else if(type==3){        
+        printf("%s",user->public_key+1);
+    }
+
+
+}
 UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
 
     UserList *p=li; //while문으로 변경하기 
@@ -37,11 +67,12 @@ UserList *updatePublicKey(UserList * li,char*user_code,char*public_key){
         if(user_code){ //if not null
             if(strncmp(p->user_code,user_code,LENGTH_CODE)==0){ //찾는 유저가 맞다면
                 if(strncmp(p->public_key,"0",1)==0){
-                    strncpy((p->public_key+1),public_key,LENGTH_CODE);
+                    strncpy(p->public_key,"1",1);
+                    strncpy((p->public_key+1),public_key,LENGTH_KEY);
                 }
                 else{
                     strncpy(p->public_key,"0",1);
-                    strncpy((p->public_key+1),public_key,LENGTH_CODE);
+                    strncpy((p->public_key+1),public_key,LENGTH_KEY);
                 }
                 isUpdated=1;
                 break;
