@@ -59,13 +59,26 @@ void send_to_all_clients(ClientList *np, char tmp_buffer[]) {
     }
 }
 
+char * encodeMessage(char*type,){
+    char msg[100];
+
+    return msg
+}
+
+char * decodeMessage(char* type){
+    char msg[100];
+
+    return msg
+
+}
+
 //첫 메세지가 아닐 때
 //01->공개키 공유 요청  [01]-[보내는 user code]-[공개키를 원하는 user code]
 //02->전체 공개 메세지 [02]-[보내는 user code]-[암호화 안 된 메세지]
 //03->귓속말 메세지 [03]-[보내는 user code]-[받는 user code]-[암호화 된 메세지]
 
 
-int selective_message_send(ClientList *np, char tmp_buffer[]){
+/* int selective_message_send(ClientList *np, char tmp_buffer[]){
 
     char selector[3],user_code[LENGTH_USERCODE];
     strncpy(selector,tmp_buffer,2);
@@ -124,9 +137,10 @@ int selective_message_send(ClientList *np, char tmp_buffer[]){
     }
     
     return 1;
-}
+} */
 void client_handler(void *p_client) {
     int leave_flag = 0;
+    char recv_type_flag[2];
     char user_code[LENGTH_CODE] = {};
     char public_key[128]={};
     char nickname[LENGTH_NAME] = {};
@@ -182,15 +196,17 @@ void client_handler(void *p_client) {
     // NEED WORK : thread를 별도로 주면 좋을까? 
     //[11]-[다른 유저 코드]-[다른 유저 이름] 새로 들어온 클라이언트에게 기존의 클라이언트 정보 전달 -Done
     //Segmentation fault core dumped
-    /* printf("TMP not empty:%s",tmp->user_code);
-    while(tmp!=NULL){            
-        char *code_recv_message=(char*)malloc(sizeof(char)*(2+LENGTH_USERCODE*2)+1);
-        strncpy(code_recv_message,'11',2);
-        strncpy(code_recv_message+2,tmp->user_code,6);
-        strncpy(code_recv_message+8,tmp->name,strlen(tmp->name));
-        send(np->data,code_recv_message,strlen(code_recv_message),0);
+    tmp=root->link;
+    while(tmp!=NULL){          
+        if(tmp!=np){  
+            char *code_recv_message=(char*)malloc(sizeof(char)*(2+LENGTH_USERCODE*2)+1);
+            strncpy(code_recv_message,'11',2);
+            strncpy(code_recv_message+2,tmp->user_code,6);
+            strncpy(code_recv_message+8,tmp->name,strlen(tmp->name));
+            send(np->data,code_recv_message,strlen(code_recv_message),0);
+        }
         tmp=tmp->link;
-    } */
+    } 
 
 
     // 4. np의 공개키를 받기
@@ -206,6 +222,7 @@ void client_handler(void *p_client) {
     }
 
 
+
     // 5. 대화하기 
     while (1) {
         
@@ -218,27 +235,36 @@ void client_handler(void *p_client) {
         int receive = recv(np->data, recv_buffer, LENGTH_MSG, 0);
         if (receive > 0) {
 
+            strncpy(recv_type_flag,recv_buffer,2);
+
             // 1) 귓속말 요청: 
             // - 그 사람만 읽을 수 있는 메세지를 보내기 위해, 퍼블릭 키 요청
             //   [01]-[보내는 user code]-[공개키를 원하는 user code]
+            if(recv_type_flag=="01"){
+                
+            }
 
             // - "그 사람" 찾아서 MYSQL에서 퍼블릭 키 찾아 보내주기
             // [14]-["그 사람" user code]-[공개키]
+            else if (recv_type_flag=="14"){
 
+            }
             // 2) 귓속말 전달
             // [13]-[보내는 user code]-암호화된 메세지 
             // send
+            else if ( recv_type_flag=="13"){
 
+            }
             // 3) 공개말 전달
             // [02]-[보내는 유저 코드]-[암호화 안 된 메세지]
             // send to all
-            
-            //귓속말인지 broadcast 되어도 될 말인지 키 요청인지 구분 -Done
-            if (strlen(recv_buffer) == 0) {
-                continue;
+            else if(recv_type_flag=="02"){
+
             }
+            
+
             //sprintf(send_buffer, "%s：%s from %s", np->name, recv_buffer, np->ip);
-            selective_message_send(np,send_buffer);
+            //selective_message_send(np,send_buffer);
         } else if (receive == 0 || strcmp(recv_buffer, "exit") == 0) {
             printf("%s(%s)(%d) leave the chatroom.\n", np->name, np->ip, np->data);
             sprintf(send_buffer, "%s(%s) leave the chatroom.", np->name, np->ip);

@@ -8,24 +8,33 @@
 UserList *root, *now;
 
 int main(){
+    /* 
+        int sockfd=38293;
+        char nickname[LENGTH_NAME];
+        strncpy(nickname,"Jackie",LENGTH_NAME);
+        char user_code[LENGTH_CODE];
+        strncpy(user_code,"000111",LENGTH_CODE);
+        char public_key[247]="takarazukahanagumi0601";//길이는 1임
 
-    int sockfd=38293;
-    char nickname[LENGTH_NAME];
-    strncpy(nickname,"Jackie",LENGTH_NAME);
-    char user_code[LENGTH_CODE];
-    strncpy(user_code,"000111",LENGTH_CODE);
-    char public_key[247]="takarazukahanagumi0601";//길이는 1임
+        // Test node creation
+        // Root user node 
+        root = newNode(sockfd, nickname,user_code,public_key);
+        now = root;
 
-    // Test node creation
-    // Root user node 
-    root = newNode(sockfd, nickname,user_code,public_key);
-    now = root;
+        printNode(root, "[TEST.C/NEW NODE]");
 
-    printNode(root, "[TEST.C/NEW NODE]");
+        // Test node public key update 
+        updatePublicKey(root,user_code,"asdk;ljf;394091");
+        printNode(root, "[TEST.C/UPDATE Public key] "); */
 
-    // Test node public key update 
-    updatePublicKey(root,user_code,"asdk;ljf;394091");
-    printNode(root, "[TEST.C/UPDATE Public key] ");
+    char * pointer=(char*)malloc(sizeof(char)*30);
+    strncpy(pointer,"Heather\0",7);
+
+    char array[30];
+    strncpy(array,"Heather\0",7);
+
+    print("%d, %d",strlen(pointer),strlen(array));
+
     
     return 0;
 }
