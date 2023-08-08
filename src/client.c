@@ -12,10 +12,16 @@
 #include "client.h"
 #include "string.h"
 
+'''
+고민
+항상 이름은 \0으로 끝나는 걸 어떻게 해야 보장할까?
+'''
 // Global variables
 volatile sig_atomic_t flag = 0;
 int sockfd = 0;
-char nickname[LENGTH_NAME] = {};
+char my_user_code[LENGTH_CODE]={};
+char my_nickname[LENGTH_NAME] = {};
+char my_public_key[LENGTH_KEY]={};
 UserList *root, *now;
 
 void catch_ctrl_c_and_exit(int sig) {
@@ -35,16 +41,41 @@ void send_secret_handler(){ //called in send_msg_handler
 
 }
 void recv_msg_handler() {
-    char tmp_user_code[6];
+    char tmp_user_code[LENGTH_CODE];
+    char tmp_user_name[LENGTH_NAME];
+    char tmp_encrypted_message[LENGTH_MSG];
+    char tmp_decrypted_message[LENGTH_MSG];
     char receiveMessage[LENGTH_SEND] = {};
     while (1) {
         //if startswith 11, receive usercode and username pair
+        //if startswith 13, receive usercode and secret message 
         //if startswith 14, receive usercode and public key pair 
+        //if startswith 02, receive usercode and message 
         int receive = recv(sockfd, receiveMessage, LENGTH_SEND, 0);
         if (receive > 0) {
             if(strncmp(receiveMessage,"11",2)==0){
+                strncpy(tmp_user_code,receiveMessage+2,LENGTH_CODE);
+                strcpy(tmp_user_name,receiveMessage+2+LENGTH_CODE);
                 //save it in struct
                 root->link=newNode(sockfd,user_name,user_code,NULL);
+            }
+            else if(strncmp(receiveMessage,"13",2)==0){
+                printf("[CLIENT.C RECV MSG HANDLER] Secret message incoming");
+                strncpy(tmp_user_code,receiveMessage+2,LENGTH_CODE);
+                strcpy(tmp_encrypted_message,receiveMessage+2+LENGTH_CODE);
+
+                //decrypt 
+                if(my_public_key){
+                    tmp_decrypted_message="HI" //decrypt(tmp_encrypted_message,my_public_key)
+                    printf("[CLIENT.C RECV MSG HANDLER] %s",tmp_decrypted_message);
+                }//else, fail
+                else{
+                    //NEED WORK
+                    printf("[CLIENT.C RECV MSG HANDLER] Secret message was not decrypted because my public key did not exist")
+                }
+                
+
+
             }
             else if (strncmp(receiveMessage,"14",2)==0)
             {
@@ -54,7 +85,9 @@ void recv_msg_handler() {
             {
                 printf("\r%s\n", receiveMessage);
                 str_overwrite_stdout();
+
             }
+            
             
             
         } else if (receive == 0) {
@@ -137,27 +170,44 @@ int main()
     printf("Connect to Server: %s:%d\n", inet_ntoa(server_info.sin_addr), ntohs(server_info.sin_port));
     printf("You are: %s:%d\n", inet_ntoa(client_info.sin_addr), ntohs(client_info.sin_port));
     print("If you want to send a secret message, type SECRET\n\n");
-    send(sockfd, nickname, LENGTH_NAME, 0);
-    
-    // My Keys
-    char public_key[LENGTH_CODE]={0};
 
-    // Handshake with Server
+
+    // Receive user code from server first
+    // [10][user_code]
     char receiveMessage[LENGTH_SEND];
-    int receive = recv(sockfd, receiveMessage, LENGTH_SEND, 0);
-    char userCode[6];
-    if (receive > 0) { //내 user code를 받을 땐 10으로 시작 
-        if(strncmp(receiveMessage,"10",2)==0){
-            strncpy(userCode,receiveMessage+2,6);
+    int receive=recv(sockfd, receiveMessage, LENGTH_SEND, 0);
+
+    if (receive > 0) { //recieve가 제대로 되어야 시작해라 
+        while(strncmp(receiveMessage,"10",2)!=0){ //10으로 시작하지 않는다면 버리고 다시 받아라 
+            receive=recv(sockfd, receiveMessage, LENGTH_SEND, 0);
+            if (receive <=0){
+                continue;
+            }
         }
-        else{
-            printf("[CLIENT.C/MAIN]: Didn't receive client code\n");
-            strncpy(userCode,"000000",6);
-        }
+        strncpy(my_user_code,receiveMessage+2,6);
+        printf("[CLIENT.C/MAIN] you received your code:%s",strcat(my_user_code,"\0"));
     }
+    
+    
+    // Send server my nickname 
+    //[00][user_code][nickname]
+    char sendMessage[LENGTH_SEND];
+    strncpy(sendMessage,"00",2);
+    strncpy(sendMessage+2,my_user_code,LENGTH_CODE);
+    strncpy(sendMessage+2+LENGTH_CODE,my_nickname,strlen(my_nickname));
+    send(sockfd, sendMessage, LENGTH_NAME, 0);
+
+    // Send server my public key 
+    // My Keys
+    // 통합 
+    char sendMessage[LENGTH_SEND];
+    strncpy(sendMessage,"04",2);
+    strncpy(sendMessage+2,my_user_code,LENGTH_CODE);
+    strncpy(sendMessage+2+LENGTH_CODE,my_public_key,strlen(my_public_key));
+    send(sockfd, sendMessage, LENGTH_NAME, 0);
 
     // Root user node 
-    root = newNode(sockfd, nickname,user_code,public_key);
+    root = newNode(sockfd, my_nickname,my_user_code,my_public_key);
     now = root;
 
     pthread_t send_msg_thread;
