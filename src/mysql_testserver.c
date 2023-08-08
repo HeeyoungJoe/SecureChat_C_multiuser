@@ -61,131 +61,35 @@ void send_to_all_clients(ClientList *np, char tmp_buffer[]) {
 
 void client_handler(void *p_client) {
     int leave_flag = 0;
-    char user_code[LENGTH_CODE] = {};
-    char public_key[128]={};
-    char nickname[LENGTH_NAME] = {};
-    char recv_buffer[LENGTH_MSG] = {};
-    char send_buffer[LENGTH_SEND] = {};
+    char recv_buffer[100];
+    char send_buffer[100];
     ClientList *np = (ClientList *)p_client;
-    ClientList *tmp =(ClientList *)malloc(sizeof(ClientList)+1);
-    tmp=root->link;
-
-
-    // 1. 코드 주기 
-
-    if (recv(np->data,user_code,LENGTH_CODE+2,0)<= 0 || strlen(user_code) < 2 || strlen(user_code) >= LENGTH_CODE-1){
-        printf("%s didn't input name.\n", np->ip);
-        leave_flag = 1;
-    } else {        
-        //[10]-[내 user code]-Done/Test done
-        char *code_init_message=(char*)malloc(sizeof(char)*(2+LENGTH_USERCODE));
-        strncpy(code_init_message,"10",2);
-        strncpy(code_init_message+2,np->user_code,6);
-        send(np->data,code_init_message,strlen(code_init_message),0);
-        printf("\nUser code sent: %s\n",code_init_message);
-        free(code_init_message);
-                
-
-    }
-
-    // 2. 닉네임 받기
-    // 3. 다른 유저들에게 이 유저의 닉네임과 코드 뿌리기 
-
-    if (recv(np->data, nickname, LENGTH_NAME+8, 0) <= 0 || strlen(nickname) < 2 || strlen(nickname) >= LENGTH_NAME-1) {
-        printf("%s didn't input name.\n", np->ip);
-        leave_flag = 1;
-    } else {
-        // [00]-[user_code]-[user_nickname]
-        strncpy(np->name, nickname, LENGTH_NAME);
-        printf("%s(%s)(%d) join the chatroom.\n", np->name, np->ip, np->data);
-        sprintf(send_buffer, "%s(%s) join the chatroom.", np->name, np->ip);
-        
-    
-        //[12]-[유저 코드]-[유저 이름] 다른 모두에게 -Done /Test Done
-        char code_update_message[50];
-        strncpy(code_update_message,"12",2);
-        strncpy(code_update_message+2,np->user_code,6);
-        strncpy(code_update_message+8,np->name,strlen(np->name));
-        send_to_all_clients(np,code_update_message); // NEED WORK: root(=server) 도 제외하는지 확인
-        printf("신고식 legend:%s",code_update_message); 
-
-    }
-
-    // 3. 이 유저에게 다른 유저들의 닉네임과 코드 페어 주기
-
-    // NEED WORK : thread를 별도로 주면 좋을까? 
-    //[11]-[다른 유저 코드]-[다른 유저 이름] 새로 들어온 클라이언트에게 기존의 클라이언트 정보 전달 -Done
-    //Segmentation fault core dumped
-    /* printf("TMP not empty:%s",tmp->user_code);
-    while(tmp!=NULL){            
-        char *code_recv_message=(char*)malloc(sizeof(char)*(2+LENGTH_USERCODE*2)+1);
-        strncpy(code_recv_message,'11',2);
-        strncpy(code_recv_message+2,tmp->user_code,6);
-        strncpy(code_recv_message+8,tmp->name,strlen(tmp->name));
-        send(np->data,code_recv_message,strlen(code_recv_message),0);
-        tmp=tmp->link;
-    } */
-
-
-    // 4. np의 공개키를 받기
-
-    if (recv(np->data, public_key, LENGTH_KEY+8, 0) <= 0 || strlen(nickname) < 2 || strlen(nickname) >= LENGTH_KEY-1) {
-        printf("%s didn't input public key.\n", np->ip);
-        leave_flag = 1;
-    } else {
-        // [04][내 user code] [내 public key]
-        // np의 공개키 받기 - Done
-        strncpy(np->public_key,public_key,strlen(public_key)); 
-        printf("%s public key received",np->name);
-    }
-
-
-    // 5. 대화하기 
     while (1) {
-        
-        // 떠날지 말지 결정
-        if (leave_flag) {
-            break;
-        }
-
-        // 메세지 받기
-        int receive = recv(np->data, recv_buffer, LENGTH_MSG, 0);
+        int receive = recv(np->data, recv_buffer, sizeof(recv_buffer), 0);
         if (receive > 0) {
-
-            // 1) 귓속말 요청: 
-            // - 그 사람만 읽을 수 있는 메세지를 보내기 위해, 퍼블릭 키 요청
-            //   [01]-[보내는 user code]-[공개키를 원하는 user code]
-
-            // - "그 사람" 찾아서 MYSQL에서 퍼블릭 키 찾아 보내주기
-            // [14]-["그 사람" user code]-[공개키]
-
-            // 2) 귓속말 전달
-            // [13]-[보내는 user code]-암호화된 메세지 
-            // send
-
-            // 3) 공개말 전달
-            // [02]-[보내는 유저 코드]-[암호화 안 된 메세지]
-            // send to all
-            
-            //귓속말인지 broadcast 되어도 될 말인지 키 요청인지 구분 -Done
-            if (strlen(recv_buffer) == 0) {
-                continue;
-            }
-            //sprintf(send_buffer, "%s：%s from %s", np->name, recv_buffer, np->ip);
-            selective_message_send(np,send_buffer);
-        } else if (receive == 0 || strcmp(recv_buffer, "exit") == 0) {
-            printf("%s(%s)(%d) leave the chatroom.\n", np->name, np->ip, np->data);
-            sprintf(send_buffer, "%s(%s) leave the chatroom.", np->name, np->ip);
+            sprintf(send_buffer, "%s from %s", recv_buffer, np->ip);
+        } else if (receive == 0 || strcmp(recv_buffer, "exit\n") == 0) {
+            sprintf(send_buffer, "%d leave the chatroom.", np->data);
             leave_flag = 1;
         } else {
             printf("Fatal Error: -1\n");
-            leave_flag = 1;
         }
-        
+
+        // Send to all client except self.
+        ClientList *tmp = root->link;
+        while (tmp != NULL) {
+            if (np->data != tmp->data) {
+                printf("Send to sockfd %d: \"%s\" \n", tmp->data, send_buffer);
+                send(tmp->data, send_buffer, sizeof(send_buffer), 0);
+            }
+            tmp = tmp->link;
+        }
+        if (leave_flag) {
+            break;
+        }
     }
 
     // Remove Node
-    close(np->data);
     if (np == now) { // remove an edge node
         now = np->prev;
         now->link = NULL;
