@@ -62,16 +62,22 @@ void send_to_all_clients(ClientList *np, char tmp_buffer[]) {
 char * encodeMessage(char*type,){
     char msg[100];
 
-    return msg
+    return msg;
 }
 
 char * decodeMessage(char* type){
     char msg[100];
 
-    return msg
+    return msg;
 
 }
 
+void getKey(char** key_buffer, char* user_code){
+
+}
+int getFd(char* user_code){
+    return 0;
+}
 //첫 메세지가 아닐 때
 //01->공개키 공유 요청  [01]-[보내는 user code]-[공개키를 원하는 user code]
 //02->전체 공개 메세지 [02]-[보내는 user code]-[암호화 안 된 메세지]
@@ -247,6 +253,10 @@ void client_handler(void *p_client) {
             //   [01]-[보내는 user code]-[공개키를 원하는 user code]
             if(recv_type_flag=="01"){
                 //find usercode
+                strncpy(tmp_user_code,recv_buffer+2,LENGTH_CODE);
+                getKey(*tmp_key,tmp_user_code); //NEED WORK: Not coded yet
+                strncpy(tmp_user_code,recv_buffer+2+LENGTH_CODE,LENGTH_CODE);
+                send(getFd(tmp_user_code),tmp_key,LENGTH_KEY,0);
 
                 
             }

@@ -84,8 +84,8 @@ void recv_msg_handler() {
             else if (strncmp(receiveMessage,"14",2)==0)
             {
                 printf("[CLIENT.C RECV MSG HANDLER] received key");
-                strncpy(tmp_user_code,receiveMessage,LENGTH_CODE);
-                strncpy(tmp_key,receiveMessage,LENGTH_KEY);
+                strncpy(tmp_user_code,receiveMessage+2,LENGTH_CODE);
+                strncpy(tmp_key,receiveMessage+2+LENGTH_CODE,LENGTH_KEY);
 
             }
             
@@ -93,8 +93,8 @@ void recv_msg_handler() {
             else if (strncmp(receiveMessage,"02",2)==0)
             {
                 printf("[CLIENT.C RECV MSG HANDLER] received pub message");
-                strncpy(tmp_user_code,receiveMessage,LENGTH_CODE);
-                strncpy(tmp_message,receiveMessage,LENGTH_MSG);
+                strncpy(tmp_user_code,receiveMessage+2,LENGTH_CODE);
+                strncpy(tmp_message,receiveMessage+2+LENGTH_CODE,LENGTH_MSG);
 
             }
             
