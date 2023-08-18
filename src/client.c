@@ -95,7 +95,8 @@ void recv_msg_handler() {
                 printf("[CLIENT.C RECV MSG HANDLER] received pub message");
                 strncpy(tmp_user_code,receiveMessage+2,LENGTH_CODE);
                 strncpy(tmp_message,receiveMessage+2+LENGTH_CODE,LENGTH_MSG);
-
+                //NEED WORK
+                //Print messge
             }
             
             

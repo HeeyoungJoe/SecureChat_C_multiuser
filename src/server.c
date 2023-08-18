@@ -270,13 +270,14 @@ void client_handler(void *p_client) {
             // [13]-[보내는 user code]-암호화된 메세지 
             // send
             else if ( recv_type_flag=="13"){
-
+                strncpy(tmp_user_code,recv_buffer+2,LENGTH_CODE);
+                send(getFd(tmp_user_code),recv_buffer,strlen(recv_buffer),0);
             }
             // 3) 공개말 전달
             // [02]-[보내는 유저 코드]-[암호화 안 된 메세지]
             // send to all
             else if(recv_type_flag=="02"){
-
+                send_to_all_clients(np,recv_buffer);
             }
             
 
