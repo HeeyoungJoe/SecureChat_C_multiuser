@@ -146,6 +146,11 @@ void client_handler(void *p_client) {
     char nickname[LENGTH_NAME] = {};
     char recv_buffer[LENGTH_MSG] = {};
     char send_buffer[LENGTH_SEND] = {};
+    char tmp_user_code[LENGTH_CODE];
+    char tmp_user_name[LENGTH_NAME];
+    char tmp_message[LENGTH_MSG];
+    char tmp_key[LENGTH_KEY];
+    char tmp_encrypted_message[LENGTH_MSG];
     ClientList *np = (ClientList *)p_client;
     ClientList *tmp =(ClientList *)malloc(sizeof(ClientList)+1);
     tmp=root->link;
@@ -194,7 +199,7 @@ void client_handler(void *p_client) {
     // 3. 이 유저에게 다른 유저들의 닉네임과 코드 페어 주기
 
     // NEED WORK : thread를 별도로 주면 좋을까? 
-    //[11]-[다른 유저 코드]-[다른 유저 이름] 새로 들어온 클라이언트에게 기존의 클라이언트 정보 전달 -Done
+    // [11]-[다른 유저 코드]-[다른 유저 이름] 새로 들어온 클라이언트에게 기존의 클라이언트 정보 전달 -Done
     //Segmentation fault core dumped
     tmp=root->link;
     while(tmp!=NULL){          
@@ -241,6 +246,8 @@ void client_handler(void *p_client) {
             // - 그 사람만 읽을 수 있는 메세지를 보내기 위해, 퍼블릭 키 요청
             //   [01]-[보내는 user code]-[공개키를 원하는 user code]
             if(recv_type_flag=="01"){
+                //find usercode
+
                 
             }
 

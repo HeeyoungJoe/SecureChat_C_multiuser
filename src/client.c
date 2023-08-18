@@ -43,22 +43,24 @@ void send_secret_handler(){ //called in send_msg_handler
 void recv_msg_handler() {
     char tmp_user_code[LENGTH_CODE];
     char tmp_user_name[LENGTH_NAME];
+    char tmp_message[LENGTH_MSG];
+    char tmp_key[LENGTH_KEY];
     char tmp_encrypted_message[LENGTH_MSG];
     char tmp_decrypted_message[LENGTH_MSG];
     char receiveMessage[LENGTH_SEND] = {};
     while (1) {
-        //if startswith 11, receive usercode and username pair
-        //if startswith 13, receive usercode and secret message 
-        //if startswith 14, receive usercode and public key pair 
-        //if startswith 02, receive usercode and message 
         int receive = recv(sockfd, receiveMessage, LENGTH_SEND, 0);
         if (receive > 0) {
+
+            //if startswith 11, receive usercode and username pair
             if(strncmp(receiveMessage,"11",2)==0){
                 strncpy(tmp_user_code,receiveMessage+2,LENGTH_CODE);
                 strcpy(tmp_user_name,receiveMessage+2+LENGTH_CODE);
                 //save it in struct
                 root->link=newNode(sockfd,user_name,user_code,NULL);
             }
+            
+            //if startswith 13, receive usercode and secret message 
             else if(strncmp(receiveMessage,"13",2)==0){
                 printf("[CLIENT.C RECV MSG HANDLER] Secret message incoming");
                 strncpy(tmp_user_code,receiveMessage+2,LENGTH_CODE);
@@ -77,14 +79,22 @@ void recv_msg_handler() {
 
 
             }
+            
+            //if startswith 14, receive usercode and public key pair 
             else if (strncmp(receiveMessage,"14",2)==0)
             {
-            
+                printf("[CLIENT.C RECV MSG HANDLER] received key");
+                strncpy(tmp_user_code,receiveMessage,LENGTH_CODE);
+                strncpy(tmp_key,receiveMessage,LENGTH_KEY);
+
             }
+            
+            //if startswith 02, receive usercode and message 
             else if (strncmp(receiveMessage,"02",2)==0)
             {
-                printf("\r%s\n", receiveMessage);
-                str_overwrite_stdout();
+                printf("[CLIENT.C RECV MSG HANDLER] received pub message");
+                strncpy(tmp_user_code,receiveMessage,LENGTH_CODE);
+                strncpy(tmp_message,receiveMessage,LENGTH_MSG);
 
             }
             
