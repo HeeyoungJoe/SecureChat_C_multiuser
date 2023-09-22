@@ -2,14 +2,14 @@
 #include <stdio.h>
 #include <string.h>
 
-int	natoi(char *str, int n);
+int	nposatoi(char *str, unsigned int n);
 int	strendswith(char *end, char *str);
 int	strstartswith(char *s1, char *s2);
 
 int	main(int argc, char **argv)
 {
-	//test natoi
-	//printf("natoi for %s :  %d\n", argv[1], natoi(argv[1], strlen(argv[1])));
+	//test nposatoi
+	//printf("nposatoi for %s :  %d\n", argv[1], nposatoi(argv[1], strlen(argv[1])));
 	
 	//test strendswith
 	//printf("Does %s endswith cute?: %d\n", argv[1], strendswith("cute", argv[1]));

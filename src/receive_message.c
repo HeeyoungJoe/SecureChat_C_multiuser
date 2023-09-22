@@ -1,8 +1,14 @@
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-# define KEY_SIZE 256
+# define KEY_SIZE 287
+# define USER_CODE_SIZE 6
 
-int	natoi(char *str, int n);
+void	puterror(char *str);
+int	nposatoi(char *str, unsigned int n);
 int	strstartswith(char *s1, char *s2);
+int	strendswith(char *s1, char *s2);
 
 // 1. Receiving
 // finding the type of message
@@ -15,23 +21,23 @@ int	return_message_type(char *str)
 {
 	if (str == NULL)
 		return -1;
-	int message_type = natoi(str, 2);
+	int message_type = nposatoi(str, 2);
 	return message_type;
 }
 
 char	**return_splitted_message(char *str, char **commands)
 {
 	int	idx = 0;
-	char	**splitted = (char *)malloc(sizeof(char *) * 10);
+	char	**splitted = (char **)malloc(sizeof(char *) * 10);
 	int	splitted_idx = 0;
-	while (str != (char *)0 && commands[idx] != '\0')
+	while (str != (char *)0 && *(commands[idx]) != '\0')
 	{
-		if (strnequal("usercode", commands[idx]) == 1)
+		if (strstartswith("usercode", commands[idx]) == 1)
 		{
-			splitted[splitted_idx++] = strndup(str, 6);
-			str += 6;
+			splitted[splitted_idx++] = strndup(str, USER_CODE_SIZE);
+			str += USER_CODE_SIZE;
 		}
-		else if (strnequal("key", commands[idx]) == 1)
+		else if (strstartswith("key", commands[idx]) == 1)
 		{
 			splitted[splitted_idx++] = strndup(str, KEY_SIZE);
 			str += KEY_SIZE;
@@ -49,7 +55,7 @@ char	**return_splitted_message(char *str, char **commands)
 
 		idx++;
 	}
-	splitted_idx[idx] = 0;
+	splitted[idx] = 0;
 	return splitted;
 }
 			

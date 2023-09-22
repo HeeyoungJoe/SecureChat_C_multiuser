@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+int	return_strcount(char	**strs)
+{
+	int	count = 0;
+	while (strs[count] != 0)
+		count++;
+	return count;
+}
+
 int	strendswith(char *end, char *str)
 {
 	int	end_len = strlen(end);
@@ -38,7 +46,7 @@ int	strstartswith(char *s1, char *s2)
 
 
 
-int	natoi(char *str, int n)
+int	nposatoi(char *str, unsigned int n)
 {
 	//starting from position 0 to null, 
 	//check n characters and turn it into decimal int
@@ -50,8 +58,12 @@ int	natoi(char *str, int n)
 	while (str[idx] != '\0' && idx < n)
 	{
 		result *= 10;
+		if (str[idx] < '0' || str[idx] > '9')
+			return -1;
 		result += str[idx] - '0';
 		idx++;
 	}
+	if (idx != n)
+		return -1;
 	return result;
 }
