@@ -2,7 +2,7 @@
 # define KEY_SIZE 256
 
 int	natoi(char *str, int n);
-int	strs1equal(char *s1, char *s2);
+int	strstartswith(char *s1, char *s2);
 
 // 1. Receiving
 // finding the type of message
