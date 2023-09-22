@@ -24,7 +24,7 @@ char	**return_splitted_message(char *str, char **commands)
 	int	idx = 0;
 	char	**splitted = (char *)malloc(sizeof(char *) * 10);
 	int	splitted_idx = 0;
-	while (commands[idx] != '\0')
+	while (str != (char *)0 && commands[idx] != '\0')
 	{
 		if (strnequal("usercode", commands[idx]) == 1)
 		{
@@ -38,8 +38,19 @@ char	**return_splitted_message(char *str, char **commands)
 		}
 		else if (strendswith("message", commands[idx]) == 1)
 		{
-			splitted[splitted_idx++] = strndup(str
-		idx++;
+			splitted[splitted_idx++] = strndup(str, strlen(str));
+			str = 0;
+		}
+		else
+		{
+			printf("RECEIVE MSG ERROR : undefined command caught - %s\n", commands[idx]);
+			return (char **)0;
+		}
 
+		idx++;
+	}
+	splitted_idx[idx] = 0;
+	return splitted;
+}
 			
 
