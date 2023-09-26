@@ -30,7 +30,7 @@ char	**return_splitted_message(char *str, char **commands)
 	int	idx = 0;
 	char	**splitted = (char **)malloc(sizeof(char *) * 10);
 	int	splitted_idx = 0;
-	while (str != (char *)0 && *(commands[idx]) != '\0')
+	while (str != (char *)0 && commands[idx] != 0)
 	{
 		if (strstartswith("usercode", commands[idx]) == 1)
 		{
@@ -44,6 +44,8 @@ char	**return_splitted_message(char *str, char **commands)
 		}
 		else if (strendswith("message", commands[idx]) == 1)
 		{
+			//Warning: message has no size limit
+			//Warning: message is always the last part of the message
 			splitted[splitted_idx++] = strndup(str, strlen(str));
 			str = 0;
 		}
@@ -59,4 +61,17 @@ char	**return_splitted_message(char *str, char **commands)
 	return splitted;
 }
 			
-
+char	**create_command(char *str, char del)
+{
+	char	**commands = (char **)malloc(sizeof(char *) * 10);
+	char	*tmp = strtok(str, &del);
+	int	i = 0;
+	while (tmp != NULL)
+	{
+		commands[i] = strdup(tmp);
+		tmp = strtok(str, &del);
+		i++;
+	}
+	commands[i] = 0;
+	return commands;
+}
