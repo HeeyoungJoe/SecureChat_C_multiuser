@@ -1,0 +1,10 @@
+test
+- utils.c /  free_listoflist
+- / build_message(char **built_message, char **commands)
+
+code
+- server_manage_client_node.c / return_node(char *usercode)
+- server_message_client_node.c / client node & all
+- client_node.h
+
+

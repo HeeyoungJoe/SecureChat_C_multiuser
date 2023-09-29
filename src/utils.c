@@ -67,3 +67,14 @@ int	nposatoi(char *str, unsigned int n)
 		return -1;
 	return result;
 }
+
+void	free_listoflist(char **lol)
+{
+	int	idx = 0;
+	while (lol[idx] != 0)
+	{
+		free(lol[idx]);
+		idx++;
+	}
+	free(lol);
+}

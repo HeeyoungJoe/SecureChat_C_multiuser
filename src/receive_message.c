@@ -75,3 +75,9 @@ char	**create_command(char *str, char del)
 	commands[i] = 0;
 	return commands;
 }
+
+//NEED WORK
+int	build_message(char **built_message, char **commands)
+{
+	return 0;
+}
